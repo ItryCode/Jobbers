@@ -32,7 +32,7 @@ const Register = () => {
     e.preventDefault();
     const { name, email, password, isMember } = values;
     if (!email || !password || (!isMember && !name)) {
-      toast.error("Please Fill Out All The Fields");
+      toast.error("Please Fill Out All The Fields!");
       return;
     }
     if (isMember) {
