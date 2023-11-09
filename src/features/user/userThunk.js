@@ -1,4 +1,6 @@
 import customInstance from "../../utils/axios";
+import { clearAllJobsState } from "../allJobs/allJobsSlice";
+import { clearValues } from "../job/jobSlice";
 import { logoutUser } from "./userSlice";
 
 export const registerUserThunk = async (url, user, thunkAPI) => {
@@ -30,5 +32,16 @@ export const updateUserThunk = async (url, user, thunkAPI) => {
       return thunkAPI.rejectWithValue("Access denied!Logging out");
     }
     return thunkAPI.rejectWithValue(error.response.data.msg);
+  }
+};
+
+export const clearStoreThunk = async (message, thunkAPI) => {
+  try {
+    thunkAPI.dispatch(logoutUser(message));
+    thunkAPI.dispatch(clearAllJobsState());
+    thunkAPI.dispatch(clearValues());
+    return Promise.resolve();
+  } catch (error) {
+    return Promise.reject();
   }
 };
