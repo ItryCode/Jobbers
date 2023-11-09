@@ -5,13 +5,16 @@ import Loading from "./Loading";
 import Job from "./Job";
 import { useEffect } from "react";
 import { getAllJobs } from "../features/allJobs/allJobsSlice";
+import PageBtnContainer from "./PageBtnContainer";
 
 const JobsContainer = () => {
   useEffect(() => {
     dispatch(getAllJobs());
   }, []);
 
-  const { jobs, isLoading } = useSelector((store) => store.allJobs);
+  const { jobs, isLoading, page, totalJobs, numOfPages } = useSelector(
+    (store) => store.allJobs
+  );
   const dispatch = useDispatch();
 
   if (isLoading) {
@@ -28,12 +31,14 @@ const JobsContainer = () => {
 
   return (
     <Wrapper>
-      <h5>Jobs info</h5>
+      <h5>{totalJobs > 1 ? `${totalJobs} jobs` : "job"} </h5>
+
       <div className="jobs">
         {jobs.map((job) => {
           return <Job key={job._id} {...job} />;
         })}
       </div>
+      {numOfPages > 1 && <PageBtnContainer />}
     </Wrapper>
   );
 };
