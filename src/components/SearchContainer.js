@@ -4,17 +4,18 @@ import Wrapper from "../assets/wrappers/SearchContainer";
 import { Form } from "react-router-dom";
 import FormRow from "./FormRow";
 import FormRowSelect from "./FormRowSelect";
+import { useState, useMemo } from "react";
 
 import { clearFilters, handleChange } from "../features/allJobs/allJobsSlice";
 
 const SearchContainer = () => {
+  const [localSearch, setLocalSearch] = useState("");
   const { isLoading, search, searchStatus, searchType, sort, sortOptions } =
     useSelector((store) => store.allJobs);
   const { jobTypeOptions, statusOptions } = useSelector((store) => store.job);
   const dispatch = useDispatch();
 
   const handleSearch = (e) => {
-    if (isLoading) return;
     dispatch(handleChange({ name: e.target.name, value: e.target.value }));
   };
 
@@ -31,8 +32,8 @@ const SearchContainer = () => {
           <FormRow
             type="text"
             name="search"
-            value={search}
-            handleChange={handleSearch}
+            value={localSearch}
+            handleChange={(e) => setLocalSearch(e.target.value)}
           />
           <FormRowSelect
             labelText="status"
