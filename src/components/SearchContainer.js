@@ -19,8 +19,22 @@ const SearchContainer = () => {
     dispatch(handleChange({ name: e.target.name, value: e.target.value }));
   };
 
+  const optimizedDebounce = useMemo(() => debounce(), []);
+
+  const debounce = () => {
+    let timeoutId;
+    return (e) => {
+      setLocalSearch(e.target.value);
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        dispatch(handleChange({ name: e.target.name, value: e.target.value }));
+      }, 1000);
+    };
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLocalSearch("");
     dispatch(clearFilters());
   };
 
@@ -33,7 +47,7 @@ const SearchContainer = () => {
             type="text"
             name="search"
             value={localSearch}
-            handleChange={(e) => setLocalSearch(e.target.value)}
+            handleChange={optimizedDebounce}
           />
           <FormRowSelect
             labelText="status"
